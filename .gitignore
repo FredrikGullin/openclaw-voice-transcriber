@@ -1,0 +1,26 @@
+# Local models and build artifacts
+models/
+build/
+whisper.cpp/
+
+# Temporary audio
+tmp/
+*.wav
+*.mp3
+*.ogg
+*.m4a
+*.webm
+
+# Runtime output
+transcripts/
+logs/
+
+# Python/local tooling
+.venv/
+__pycache__/
+*.pyc
+
+# Environment/secrets
+.env
+.env.*
+!.env.example
