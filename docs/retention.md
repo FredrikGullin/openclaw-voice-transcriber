@@ -46,6 +46,15 @@ original audio -> local whisper.cpp transcript -> OpenClaw/LLM conversation
 
 The LLM can usually infer obvious minor transcript mistakes once the text is in the conversation, but the transcriber should keep returning the raw local transcript for now. Add explicit `raw_transcript` + `normalized_transcript` later only if real voice samples show that transcript mistakes frequently disrupt commands.
 
+## Voice Reply Output
+
+Default user-facing behavior:
+
+- Answer voice messages naturally.
+- Do not print the raw transcript unless requested.
+- When uncertain, say `jag tolkar det som...` and then state the interpreted meaning before acting.
+- Review this policy after roughly 10-20 real voice messages and decide whether a light glossary/normalization layer is worth adding.
+
 ## Rationale
 
 Voice messages can contain private context. Keeping audio indefinitely increases privacy risk without much benefit once text has been extracted.

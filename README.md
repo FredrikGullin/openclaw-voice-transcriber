@@ -174,6 +174,16 @@ The same cleanup run also purges only this transcriber's own trashed original me
 
 The optional systemd user timer in `systemd/user/` runs this cleanup every 15 minutes with a 60-minute original-media retention window and a 24-hour transcriber-trash purge window.
 
+## Voice Reply Policy
+
+For Fredo's normal Telegram workflow, the agent should answer voice messages naturally after transcription.
+
+- Do not print the raw transcript by default.
+- Print the transcript only when Fredo asks for it, or when debugging transcription quality.
+- If the transcript is ambiguous, say `jag tolkar det som...` before acting.
+- Use the interpreted meaning for normal work, todos, project status, and memory.
+- Keep raw transcript text as temporary diagnostic context, not as long-term truth.
+
 ## Model Strategy
 
 Start lightweight, then benchmark only when quality requires it:
