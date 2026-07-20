@@ -39,6 +39,52 @@ The first test target is a locally saved OpenClaw inbound media file.
 
 If system CMake is unavailable, setup bootstraps a local CMake binary under `.local/` instead of requiring a system-wide install.
 
+## Quick Start
+
+Install/build the local runtime and download the default small multilingual model:
+
+```bash
+make setup
+```
+
+Transcribe one local audio file:
+
+```bash
+make transcribe INPUT=/path/to/voice-message.ogg
+```
+
+Run lightweight project validation:
+
+```bash
+make smoke
+```
+
+Clean old temporary runtime files:
+
+```bash
+make cleanup
+```
+
+## Configuration
+
+The default setup is local and API-free.
+
+Useful environment variables:
+
+```bash
+# Model downloaded by setup.
+OCVT_MODEL_NAME=small
+
+# Model path used by transcribe-file.sh.
+OCVT_MODEL_PATH=./.local/models/ggml-small.bin
+
+# Language passed to whisper.cpp. Use auto for Swedish/English switching.
+OCVT_LANGUAGE=auto
+
+# Keep temporary transcript/log files after transcription for debugging.
+OCVT_KEEP_ARTIFACTS=false
+```
+
 ## Model Strategy
 
 Start lightweight, then benchmark:
@@ -52,16 +98,26 @@ Start lightweight, then benchmark:
 
 This project is intended to run locally.
 
-The default design should not:
+The default design does not:
 
 - upload audio to external APIs,
 - store API keys,
 - send transcripts to third parties,
-- keep temporary `.wav` files after transcription.
+- keep temporary `.wav` files after transcription,
+- keep temporary transcript/log artifacts unless `OCVT_KEEP_ARTIFACTS=true`.
 
 ## Status
 
-Planning/scaffold stage. No transcription engine has been installed yet.
+CLI MVP implemented:
+
+- local `whisper.cpp` setup script,
+- local CMake bootstrap when system CMake is missing,
+- small multilingual model support,
+- single-file transcription command,
+- default cleanup of temporary audio/transcript/log artifacts,
+- initial benchmark documented in [docs/benchmarks.md](docs/benchmarks.md).
+
+Gateway integration is intentionally not implemented yet.
 
 ## License
 
