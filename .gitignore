@@ -2,6 +2,7 @@
 models/
 build/
 whisper.cpp/
+.local/
 
 # Temporary audio
 tmp/
@@ -14,6 +15,11 @@ tmp/
 # Runtime output
 transcripts/
 logs/
+*.txt
+
+# Keep docs and examples tracked even if they mention audio patterns.
+!docs/**/*.txt
+!examples/**/*.txt
 
 # Python/local tooling
 .venv/
