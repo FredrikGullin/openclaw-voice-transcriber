@@ -37,6 +37,8 @@ Telegram .ogg -> ffmpeg -> local Whisper transcription -> text output -> cleanup
 
 The first test target is a locally saved OpenClaw inbound media file.
 
+If system CMake is unavailable, setup bootstraps a local CMake binary under `.local/` instead of requiring a system-wide install.
+
 ## Model Strategy
 
 Start lightweight, then benchmark:

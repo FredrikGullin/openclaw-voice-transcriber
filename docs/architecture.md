@@ -22,6 +22,8 @@ Runtime artifacts are intentionally kept out of Git:
 
 ```text
 .local/
+  cmake-*/           optional local CMake bootstrap when system CMake is missing
+  downloads/         downloaded build/runtime archives
   whisper.cpp/       cloned upstream source/build
   models/            downloaded local model files
   tmp/               temporary converted audio
