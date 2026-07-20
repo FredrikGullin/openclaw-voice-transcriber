@@ -10,6 +10,7 @@ required_files=(
   ".env.example"
   "Makefile"
   "docs/architecture.md"
+  "docs/benchmarks.md"
   "docs/retention.md"
   "scripts/setup-whisper-cpp.sh"
   "scripts/transcribe-file.sh"

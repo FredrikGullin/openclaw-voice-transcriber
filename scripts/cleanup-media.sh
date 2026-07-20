@@ -10,4 +10,4 @@ if [[ ! -d "$tmp_dir" ]]; then
   exit 0
 fi
 
-find "$tmp_dir" -type f \( -name '*.wav' -o -name '*.ogg' -o -name '*.txt' \) -mmin +"$max_age_minutes" -print -delete
+find "$tmp_dir" -type f \( -name '*.wav' -o -name '*.ogg' -o -name '*.txt' -o -name '*.log' \) -mmin +"$max_age_minutes" -print -delete

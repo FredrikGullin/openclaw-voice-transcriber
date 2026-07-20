@@ -54,6 +54,7 @@ work_prefix="$tmp_dir/${stamp}-${base_name%.*}"
 wav_file="$work_prefix.wav"
 output_prefix="$work_prefix"
 output_txt="$output_prefix.txt"
+output_log="$output_prefix.log"
 
 cleanup() {
   rm -f "$wav_file"
@@ -62,13 +63,17 @@ trap cleanup EXIT
 
 ffmpeg -hide_banner -loglevel error -y -i "$input_file" -ar 16000 -ac 1 -c:a pcm_s16le "$wav_file"
 
-"$whisper_cli" \
+if ! "$whisper_cli" \
   -m "$model_path" \
   -f "$wav_file" \
   -l "$language" \
   -otxt \
   -of "$output_prefix" \
-  >/dev/null
+  >"$output_log" 2>&1; then
+  echo "Transcription failed. Log follows:" >&2
+  cat "$output_log" >&2
+  exit 1
+fi
 
 if [[ ! -f "$output_txt" ]]; then
   echo "Expected transcript was not created: $output_txt" >&2
