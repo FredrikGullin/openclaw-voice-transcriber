@@ -121,12 +121,14 @@ Exit codes:
 
 ## Model Strategy
 
-Start lightweight, then benchmark:
+Start lightweight, then benchmark only when quality requires it:
 
-- First test: small multilingual Whisper model.
-- If quality is too low: test medium.
+- Default for first gateway wrapper: small multilingual Whisper model.
+- Tested alternative: medium.
 - If bilingual Swedish/English quality needs improvement: test a quantized `large-v3-turbo` model.
 - If Swedish-only accuracy becomes important: evaluate KB-Whisper as a specialist fallback.
+
+Current benchmark result: `medium` was about 3.3x slower and 2.8x higher RAM than `small` on the first Swedish Telegram sample, without fixing the visible first-word error. Keep `small` as default unless more real samples show recurring quality problems.
 
 ## Privacy
 
