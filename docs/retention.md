@@ -10,6 +10,7 @@ This project is designed to avoid long-term audio storage by default.
 - During the first live test window, keep original inbound audio for up to 60 minutes so obvious transcription/debug issues can be investigated.
 - After integration is proven, successful original audio should be deleted immediately after transcript handling is accepted.
 - Failed transcriptions may keep the original input for a short troubleshooting window; start with 60 minutes and extend only if debugging actually needs it.
+- Media moved to recoverable trash should be permanently purged later, but only for this transcriber's own files.
 
 ## Suggested Defaults After Gateway Integration
 
@@ -19,16 +20,19 @@ temporary transcript/log: delete immediately unless debugging is enabled
 successful original audio during first live test: keep up to 60 minutes
 successful original audio after stabilization: delete after transcript is accepted
 failed original audio: keep up to 60 minutes unless actively debugging
+transcriber trash entries: purge after 24 hours
 transcript text: keep in normal OpenClaw conversation history
 ```
 
 Use `scripts/cleanup-original-media.sh` for local original-media cleanup:
 
 ```bash
-OCVT_ORIGINAL_MAX_AGE_MINUTES=60 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
+OCVT_ORIGINAL_MAX_AGE_MINUTES=60 OCVT_TRASH_MAX_AGE_MINUTES=1440 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
 ```
 
 The helper prefers `trash-put` or `gio trash`. It only uses hard `rm` deletion when `OCVT_ALLOW_RM_DELETE=true` is explicitly set.
+
+After moving old original media to trash, the helper also scans the Freedesktop trash metadata and permanently removes trashed media whose original path was inside the configured inbound media directory and whose deletion time is older than `OCVT_TRASH_MAX_AGE_MINUTES`. It does not run `gio trash --empty`, because that would clear unrelated user trash.
 
 ## LLM Normalization
 

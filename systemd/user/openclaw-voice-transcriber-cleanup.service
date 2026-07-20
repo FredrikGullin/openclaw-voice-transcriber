@@ -4,4 +4,5 @@ Description=Clean old OpenClaw Voice Transcriber inbound audio
 [Service]
 Type=oneshot
 Environment=OCVT_ORIGINAL_MAX_AGE_MINUTES=60
+Environment=OCVT_TRASH_MAX_AGE_MINUTES=1440
 ExecStart=/home/chillazz/.openclaw/workspace/openclaw-voice-transcriber/scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound

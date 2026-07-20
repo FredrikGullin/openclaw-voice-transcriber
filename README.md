@@ -80,7 +80,7 @@ make cleanup
 Clean old original inbound media after the live-test retention window:
 
 ```bash
-OCVT_ORIGINAL_MAX_AGE_MINUTES=60 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
+OCVT_ORIGINAL_MAX_AGE_MINUTES=60 OCVT_TRASH_MAX_AGE_MINUTES=1440 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
 ```
 
 Install and start the user-level cleanup timer:
@@ -170,7 +170,9 @@ Initial live-test default:
 
 `scripts/cleanup-original-media.sh` cleans old original audio files from a chosen directory. It prefers recoverable trash deletion and requires `OCVT_ALLOW_RM_DELETE=true` before using hard `rm` deletion.
 
-The optional systemd user timer in `systemd/user/` runs this cleanup every 15 minutes with a 60-minute retention window.
+The same cleanup run also purges only this transcriber's own trashed original media after `OCVT_TRASH_MAX_AGE_MINUTES` so recoverable trash does not accumulate forever. It does not empty the whole user trash.
+
+The optional systemd user timer in `systemd/user/` runs this cleanup every 15 minutes with a 60-minute original-media retention window and a 24-hour transcriber-trash purge window.
 
 ## Model Strategy
 
