@@ -53,6 +53,12 @@ Transcribe one local audio file:
 make transcribe INPUT=/path/to/voice-message.ogg
 ```
 
+Run the gateway-friendly wrapper:
+
+```bash
+./scripts/transcribe-for-gateway.sh /path/to/voice-message.ogg
+```
+
 Run lightweight project validation:
 
 ```bash
@@ -119,6 +125,21 @@ Exit codes:
 10  expected transcript file was not created
 ```
 
+## Gateway Wrapper
+
+`scripts/transcribe-for-gateway.sh` is a thin wrapper around the CLI for later OpenClaw integration.
+
+Its contract is:
+
+- stdout always contains text that is safe to send back to the user,
+- exit `0` means stdout is the transcript,
+- non-zero exit means stdout is a short user-facing failure message,
+- stderr contains the technical transcription error for logs/debugging,
+- the default model is `./.local/models/ggml-small.bin`,
+- it does not delete original inbound audio.
+
+This wrapper does not connect to Telegram by itself. The OpenClaw gateway can call it later when a local inbound voice file is available.
+
 ## Model Strategy
 
 Start lightweight, then benchmark only when quality requires it:
@@ -150,6 +171,7 @@ CLI MVP implemented:
 - local CMake bootstrap when system CMake is missing,
 - small multilingual model support,
 - single-file transcription command,
+- gateway-friendly wrapper with user-facing failure messages,
 - default cleanup of temporary audio/transcript/log artifacts,
 - deterministic CLI contract tests for failure handling,
 - initial benchmark documented in [docs/benchmarks.md](docs/benchmarks.md).

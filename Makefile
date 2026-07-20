@@ -25,6 +25,7 @@ smoke:
 
 test:
 	./tests/cli.sh
+	./tests/gateway.sh
 
 cleanup:
 	./scripts/cleanup-media.sh

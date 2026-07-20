@@ -33,9 +33,11 @@ Runtime artifacts are intentionally kept out of Git:
 
 - `scripts/setup-whisper-cpp.sh`: install/build the local whisper.cpp runtime and download a small multilingual model.
 - `scripts/transcribe-file.sh`: convert one input audio file and return transcription text.
+- `scripts/transcribe-for-gateway.sh`: map CLI success/failure into text that is safe for a later gateway caller to send back to the user.
 - `scripts/cleanup-media.sh`: remove stale local temporary files.
 - `tests/smoke.sh`: validate project structure and shell syntax without requiring a model download.
 - `tests/cli.sh`: validate the CLI success/failure contract with fake `ffmpeg` and `whisper-cli` binaries.
+- `tests/gateway.sh`: validate the gateway wrapper's user-facing success/failure contract.
 
 ## CLI Contract
 
@@ -60,6 +62,19 @@ Current exit codes:
 9   whisper.cpp transcription failed
 10  expected transcript file was not created
 ```
+
+## Gateway Wrapper Contract
+
+`scripts/transcribe-for-gateway.sh` is intentionally thin. It does not connect to Telegram or mutate OpenClaw gateway state.
+
+Its current contract:
+
+- call `scripts/transcribe-file.sh` with the default `small` model unless `OCVT_MODEL_PATH` overrides it,
+- on success, print the transcript to stdout and exit `0`,
+- on failure, print a short Swedish user-facing message to stdout and exit with the underlying CLI exit code,
+- write the technical error to stderr for logs/debugging,
+- remove wrapper temporary stdout/stderr capture files,
+- never delete the original inbound audio file.
 
 ## Later Integration
 
