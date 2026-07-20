@@ -15,9 +15,11 @@ required_files=(
   "scripts/setup-whisper-cpp.sh"
   "scripts/transcribe-file.sh"
   "scripts/transcribe-for-gateway.sh"
+  "scripts/cleanup-original-media.sh"
   "scripts/cleanup-media.sh"
   "tests/cli.sh"
   "tests/gateway.sh"
+  "tests/retention.sh"
 )
 
 for file in "${required_files[@]}"; do
@@ -30,8 +32,10 @@ done
 bash -n "$root_dir/scripts/setup-whisper-cpp.sh"
 bash -n "$root_dir/scripts/transcribe-file.sh"
 bash -n "$root_dir/scripts/transcribe-for-gateway.sh"
+bash -n "$root_dir/scripts/cleanup-original-media.sh"
 bash -n "$root_dir/scripts/cleanup-media.sh"
 bash -n "$root_dir/tests/cli.sh"
 bash -n "$root_dir/tests/gateway.sh"
+bash -n "$root_dir/tests/retention.sh"
 
 echo "Smoke checks passed."

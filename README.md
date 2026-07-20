@@ -77,6 +77,12 @@ Clean old temporary runtime files:
 make cleanup
 ```
 
+Clean old original inbound media after the live-test retention window:
+
+```bash
+OCVT_ORIGINAL_MAX_AGE_MINUTES=60 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
+```
+
 ## Configuration
 
 The default setup is local and API-free.
@@ -140,6 +146,19 @@ Its contract is:
 
 This wrapper does not connect to Telegram by itself. The OpenClaw gateway can call it later when a local inbound voice file is available.
 
+## Original Media Retention
+
+Original inbound audio should be kept for the shortest practical time.
+
+Initial live-test default:
+
+- keep original voice files for up to 60 minutes,
+- delete temporary converted audio/transcript/log artifacts immediately,
+- do not add a separate LLM normalization layer before the first live test,
+- revisit retention once a handful of real voice messages have been tested.
+
+`scripts/cleanup-original-media.sh` cleans old original audio files from a chosen directory. It prefers recoverable trash deletion and requires `OCVT_ALLOW_RM_DELETE=true` before using hard `rm` deletion.
+
 ## Model Strategy
 
 Start lightweight, then benchmark only when quality requires it:
@@ -172,6 +191,7 @@ CLI MVP implemented:
 - small multilingual model support,
 - single-file transcription command,
 - gateway-friendly wrapper with user-facing failure messages,
+- original-media retention cleanup helper,
 - default cleanup of temporary audio/transcript/log artifacts,
 - deterministic CLI contract tests for failure handling,
 - initial benchmark documented in [docs/benchmarks.md](docs/benchmarks.md).
