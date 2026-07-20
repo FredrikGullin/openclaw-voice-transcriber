@@ -35,6 +35,31 @@ Runtime artifacts are intentionally kept out of Git:
 - `scripts/transcribe-file.sh`: convert one input audio file and return transcription text.
 - `scripts/cleanup-media.sh`: remove stale local temporary files.
 - `tests/smoke.sh`: validate project structure and shell syntax without requiring a model download.
+- `tests/cli.sh`: validate the CLI success/failure contract with fake `ffmpeg` and `whisper-cli` binaries.
+
+## CLI Contract
+
+The gateway should treat `scripts/transcribe-file.sh` as a small process boundary:
+
+- exit `0`: stdout is transcript text,
+- non-zero exit: stderr is a short human-readable error,
+- no stack traces or raw tool logs are printed by default,
+- temporary `.wav`, `.txt`, and `.log` files are deleted by default,
+- `OCVT_KEEP_ARTIFACTS=true` keeps transcript/log artifacts for debugging.
+
+Current exit codes:
+
+```text
+2   usage error
+3   input file not found
+4   input file is empty
+5   ffmpeg not found
+6   model file not found
+7   whisper.cpp binary not found
+8   ffmpeg could not decode/convert input
+9   whisper.cpp transcription failed
+10  expected transcript file was not created
+```
 
 ## Later Integration
 

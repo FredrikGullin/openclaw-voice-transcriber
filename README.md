@@ -59,6 +59,12 @@ Run lightweight project validation:
 make smoke
 ```
 
+Run deterministic CLI contract tests without a real model or real audio:
+
+```bash
+make test
+```
+
 Clean old temporary runtime files:
 
 ```bash
@@ -83,6 +89,34 @@ OCVT_LANGUAGE=auto
 
 # Keep temporary transcript/log files after transcription for debugging.
 OCVT_KEEP_ARTIFACTS=false
+
+# Optional test/debug overrides.
+OCVT_FFMPEG=ffmpeg
+OCVT_WHISPER_CLI=./.local/whisper.cpp/build/bin/whisper-cli
+```
+
+## CLI Contract
+
+`scripts/transcribe-file.sh` is designed for gateway wrapping:
+
+- stdout contains only transcript text on success,
+- stderr contains a short human-readable error on failure,
+- temporary `.wav`, `.txt`, and `.log` files are removed by default,
+- `OCVT_KEEP_ARTIFACTS=true` keeps transcript/log artifacts for debugging.
+
+Exit codes:
+
+```text
+0   success
+2   usage error
+3   input file not found
+4   input file is empty
+5   ffmpeg not found
+6   model file not found
+7   whisper.cpp binary not found
+8   ffmpeg could not decode/convert input, often corrupt or unsupported audio
+9   whisper.cpp transcription failed
+10  expected transcript file was not created
 ```
 
 ## Model Strategy
@@ -115,6 +149,7 @@ CLI MVP implemented:
 - small multilingual model support,
 - single-file transcription command,
 - default cleanup of temporary audio/transcript/log artifacts,
+- deterministic CLI contract tests for failure handling,
 - initial benchmark documented in [docs/benchmarks.md](docs/benchmarks.md).
 
 Gateway integration is intentionally not implemented yet.

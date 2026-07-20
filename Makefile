@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help setup transcribe smoke cleanup
+.PHONY: help setup transcribe smoke test cleanup
 
 help:
 	@printf '%s\n' \
@@ -10,6 +10,7 @@ help:
 		'  make setup      Install/build local whisper.cpp helper and model' \
 		'  make transcribe  Transcribe INPUT=/path/to/audio.ogg' \
 		'  make smoke      Run lightweight validation checks' \
+		'  make test       Run CLI contract tests' \
 		'  make cleanup    Remove temporary runtime files'
 
 setup:
@@ -21,6 +22,9 @@ transcribe:
 
 smoke:
 	./tests/smoke.sh
+
+test:
+	./tests/cli.sh
 
 cleanup:
 	./scripts/cleanup-media.sh
