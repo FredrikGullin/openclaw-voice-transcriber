@@ -17,6 +17,7 @@ local_dir="$root_dir/.local"
 tmp_dir="${OCVT_TMP_DIR:-$local_dir/tmp}"
 model_path="${OCVT_MODEL_PATH:-$local_dir/models/ggml-small.bin}"
 language="${OCVT_LANGUAGE:-auto}"
+keep_artifacts="${OCVT_KEEP_ARTIFACTS:-false}"
 
 mkdir -p "$tmp_dir"
 
@@ -58,6 +59,9 @@ output_log="$output_prefix.log"
 
 cleanup() {
   rm -f "$wav_file"
+  if [[ "$keep_artifacts" != "true" ]]; then
+    rm -f "$output_txt" "$output_log"
+  fi
 }
 trap cleanup EXIT
 
