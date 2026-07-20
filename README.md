@@ -186,6 +186,8 @@ For Fredo's normal Telegram workflow, the agent should answer voice messages nat
 - Use the interpreted meaning for normal work, todos, project status, and memory.
 - Keep raw transcript text as temporary diagnostic context, not as long-term truth.
 
+This policy depends on the agent/LLM layer that consumes the transcript. The transcriber itself only produces raw text. Behavior may differ when OpenClaw runs a different model family, such as Anthropic models or a local LLM, especially for Swedish/English mixed technical speech and confidence judgment. Re-test the reply policy when changing the OpenClaw model.
+
 ## Model Strategy
 
 Start lightweight, then benchmark only when quality requires it:

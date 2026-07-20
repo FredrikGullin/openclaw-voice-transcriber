@@ -46,6 +46,8 @@ original audio -> local whisper.cpp transcript -> OpenClaw/LLM conversation
 
 The LLM can usually infer obvious minor transcript mistakes once the text is in the conversation, but the transcriber should keep returning the raw local transcript for now. Add explicit `raw_transcript` + `normalized_transcript` later only if real voice samples show that transcript mistakes frequently disrupt commands.
 
+Interpretation quality is model-dependent. The current behavior was evaluated with Fredo's OpenClaw agent model, but Anthropic models, smaller OpenAI models, or local LLMs may make different correction and confidence judgments from the same raw transcript. Treat the voice reply policy as an agent-layer convention and re-test it when changing the OpenClaw model.
+
 ## Voice Reply Output
 
 Default user-facing behavior:
