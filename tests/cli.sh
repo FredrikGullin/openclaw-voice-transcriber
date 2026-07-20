@@ -121,6 +121,13 @@ run_case "missing-ffmpeg" 5 "ffmpeg not found." env OCVT_FFMPEG="$tmp_root/no-ff
 run_case "missing-whisper" 7 "whisper.cpp binary not found." env OCVT_FFMPEG="$tool_bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/no-whisper" OCVT_MODEL_PATH="$model" "$script" "$input"
 run_case "missing-model" 6 "Model file not found:" env OCVT_FFMPEG="$tool_bin/ffmpeg" OCVT_WHISPER_CLI="$tool_bin/whisper-cli" OCVT_MODEL_PATH="$tmp_root/no-model.bin" "$script" "$input"
 run_case "corrupt-audio" 8 "Could not decode or convert audio file." env OCVT_FAKE_FFMPEG_FAIL=true OCVT_FFMPEG="$tool_bin/ffmpeg" OCVT_WHISPER_CLI="$tool_bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
+
+if command -v ffmpeg >/dev/null 2>&1; then
+  corrupt_input="$tmp_root/corrupt.ogg"
+  printf 'this is not a valid ogg file\n' >"$corrupt_input"
+  run_case "real-corrupt-audio" 8 "Could not decode or convert audio file." env OCVT_FFMPEG=ffmpeg OCVT_WHISPER_CLI="$tool_bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$corrupt_input"
+fi
+
 run_case "whisper-failure" 9 "Transcription failed." env OCVT_FAKE_WHISPER_FAIL=true OCVT_FFMPEG="$tool_bin/ffmpeg" OCVT_WHISPER_CLI="$tool_bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
 run_case "missing-transcript" 10 "Expected transcript was not created:" env OCVT_FAKE_SKIP_TRANSCRIPT=true OCVT_FFMPEG="$tool_bin/ffmpeg" OCVT_WHISPER_CLI="$tool_bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
 
