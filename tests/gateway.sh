@@ -39,10 +39,15 @@ EOF
 set -euo pipefail
 
 output_prefix=""
+language=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -of)
       output_prefix="$2"
+      shift 2
+      ;;
+    -l)
+      language="$2"
       shift 2
       ;;
     *)
@@ -50,6 +55,11 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ -n "${OCVT_EXPECT_LANGUAGE:-}" && "$language" != "$OCVT_EXPECT_LANGUAGE" ]]; then
+  echo "expected language $OCVT_EXPECT_LANGUAGE, got $language" >&2
+  exit 1
+fi
 
 printf 'hej från gateway\n' >"${output_prefix}.txt"
 EOF
@@ -111,6 +121,8 @@ model="$tmp_root/models/model.bin"
 printf 'not really audio\n' >"$input"
 
 run_gateway_case "success" 0 "hej från gateway" env OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
+run_gateway_case "default-swedish-language" 0 "hej från gateway" env OCVT_EXPECT_LANGUAGE=sv OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
+run_gateway_case "language-override" 0 "hej från gateway" env OCVT_LANGUAGE=auto OCVT_EXPECT_LANGUAGE=auto OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"
 run_gateway_case "missing-input" 3 "Jag kunde inte hitta ljudfilen som skulle transkriberas." env OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$tmp_root/missing.ogg"
 run_gateway_case "missing-model" 6 "Transkribering är inte tillgänglig just nu eftersom språkmodellen saknas." env OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$tmp_root/missing-model.bin" "$script" "$input"
 run_gateway_case "corrupt-audio" 8 "Jag kunde inte transkribera ljudfilen eftersom den verkar vara skadad eller i ett format jag inte kan läsa." env OCVT_FAKE_FFMPEG_FAIL=true OCVT_FFMPEG="$tmp_root/bin/ffmpeg" OCVT_WHISPER_CLI="$tmp_root/bin/whisper-cli" OCVT_MODEL_PATH="$model" "$script" "$input"

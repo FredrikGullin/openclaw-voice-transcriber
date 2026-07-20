@@ -10,6 +10,7 @@ root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 input_file="$1"
 tmp_dir="${OCVT_TMP_DIR:-$root_dir/.local/tmp}"
 model_path="${OCVT_MODEL_PATH:-$root_dir/.local/models/ggml-small.bin}"
+language="${OCVT_LANGUAGE:-sv}"
 
 mkdir -p "$tmp_dir"
 
@@ -22,7 +23,7 @@ cleanup() {
 trap cleanup EXIT
 
 set +e
-OCVT_MODEL_PATH="$model_path" "$root_dir/scripts/transcribe-file.sh" "$input_file" >"$stdout_file" 2>"$stderr_file"
+OCVT_MODEL_PATH="$model_path" OCVT_LANGUAGE="$language" "$root_dir/scripts/transcribe-file.sh" "$input_file" >"$stdout_file" 2>"$stderr_file"
 status=$?
 set -e
 

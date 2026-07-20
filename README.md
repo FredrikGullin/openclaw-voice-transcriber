@@ -96,7 +96,7 @@ OCVT_MODEL_NAME=small
 # Model path used by transcribe-file.sh.
 OCVT_MODEL_PATH=./.local/models/ggml-small.bin
 
-# Language passed to whisper.cpp. Use auto for Swedish/English switching.
+# Language passed to whisper.cpp by the core CLI. Use auto for Swedish/English switching.
 OCVT_LANGUAGE=auto
 
 # Keep temporary transcript/log files after transcription for debugging.
@@ -142,6 +142,8 @@ Its contract is:
 - non-zero exit means stdout is a short user-facing failure message,
 - stderr contains the technical transcription error for logs/debugging,
 - the default model is `./.local/models/ggml-small.bin`,
+- the default gateway language hint is Swedish (`sv`) to avoid short Swedish voice notes being misdetected as English,
+- set `OCVT_LANGUAGE=auto` when testing mixed Swedish/English input,
 - it does not delete original inbound audio.
 
 This wrapper does not connect to Telegram by itself. The OpenClaw gateway can call it later when a local inbound voice file is available.
@@ -196,7 +198,7 @@ CLI MVP implemented:
 - deterministic CLI contract tests for failure handling,
 - initial benchmark documented in [docs/benchmarks.md](docs/benchmarks.md).
 
-Gateway integration is intentionally not implemented yet.
+Gateway wrapper integration has been wired through OpenClaw `tools.media.audio` in Fredo's local runtime config. The repository remains a standalone helper and does not modify OpenClaw's installed runtime code.
 
 ## License
 
