@@ -180,7 +180,9 @@ For Fredo's normal Telegram workflow, the agent should answer voice messages nat
 
 - Do not print the raw transcript by default.
 - Print the transcript only when Fredo asks for it, or when debugging transcription quality.
-- If the transcript is ambiguous, say `jag tolkar det som...` before acting.
+- If the meaning is clear enough, roughly 90% confidence or better, answer naturally without a transcription disclaimer.
+- If the meaning is genuinely uncertain, say `jag tolkar det som...` before acting.
+- For low-confidence cases, offer to print the raw transcript if that would help verify what was heard.
 - Use the interpreted meaning for normal work, todos, project status, and memory.
 - Keep raw transcript text as temporary diagnostic context, not as long-term truth.
 

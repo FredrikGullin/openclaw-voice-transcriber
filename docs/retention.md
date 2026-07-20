@@ -52,7 +52,9 @@ Default user-facing behavior:
 
 - Answer voice messages naturally.
 - Do not print the raw transcript unless requested.
-- When uncertain, say `jag tolkar det som...` and then state the interpreted meaning before acting.
+- When the meaning is clear enough, roughly 90% confidence or better, do not add a transcription disclaimer.
+- When genuinely uncertain, say `jag tolkar det som...` and then state the interpreted meaning before acting.
+- In low-confidence cases, offer to print the raw transcription result so the user can decide whether it is useful.
 - Review this policy after roughly 10-20 real voice messages and decide whether a light glossary/normalization layer is worth adding.
 
 ## Rationale
