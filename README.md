@@ -83,6 +83,15 @@ Clean old original inbound media after the live-test retention window:
 OCVT_ORIGINAL_MAX_AGE_MINUTES=60 ./scripts/cleanup-original-media.sh /home/chillazz/.openclaw/media/inbound
 ```
 
+Install and start the user-level cleanup timer:
+
+```bash
+mkdir -p ~/.config/systemd/user
+cp systemd/user/openclaw-voice-transcriber-cleanup.* ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now openclaw-voice-transcriber-cleanup.timer
+```
+
 ## Configuration
 
 The default setup is local and API-free.
@@ -160,6 +169,8 @@ Initial live-test default:
 - revisit retention once a handful of real voice messages have been tested.
 
 `scripts/cleanup-original-media.sh` cleans old original audio files from a chosen directory. It prefers recoverable trash deletion and requires `OCVT_ALLOW_RM_DELETE=true` before using hard `rm` deletion.
+
+The optional systemd user timer in `systemd/user/` runs this cleanup every 15 minutes with a 60-minute retention window.
 
 ## Model Strategy
 
